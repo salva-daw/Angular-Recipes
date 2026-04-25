@@ -256,3 +256,26 @@ En este paso, para poder ver nuestro nuevo diseño, hemos configurado la aplicac
 - Usaremos `@if` para gestionar el estado de "receta no seleccionada".
 - Diseñaremos la vista detallada con un enfoque en la legibilidad (UX para cocina).
 - Configuraremos el componente raíz para mostrar la primera receta como demostración del diseño.
+
+## Paso 7: Comunicación entre Componentes (Inputs Dinámicos)
+
+### Concepto Clave: La función `input()`
+En el Angular moderno, ya no usamos el decorador `@Input()`. Ahora usamos la función `input()`, que crea un **Signal**.
+- **Ventaja**: Como es un Signal, el componente detecta automáticamente cualquier cambio y se repinta de forma súper eficiente.
+- **Sintaxis**: `recipe = input<Recipe | null>(null);`
+
+### Flujo de Datos (Padre a Hijo)
+Para que la aplicación sea interactiva, el flujo será el siguiente:
+1.  **Hijo (`RecipeList`)**: Avisa al padre cuando el usuario hace clic en una receta.
+2.  **Padre (`App`)**: Guarda la receta seleccionada en un Signal.
+3.  **Hijo (`RecipeDetail`)**: Recibe esa receta a través de su `input()` y se actualiza automáticamente.
+
+### Nuestro Proyecto: Conectando las piezas
+Modificaremos el listado para que las tarjetas sean clicables. Al pulsar una, el componente raíz (`App`) cambiará su estado interno y el componente de detalle mostrará la nueva información al instante.
+
+### Acción realizada:
+- Usaremos la función **`output()`** en `RecipeListComponent` para emitir la receta seleccionada.
+- Implementaremos la captura del evento de clic en las tarjetas, utilizando **`event.stopPropagation()`** en el botón de eliminar para evitar conflictos entre acciones.
+- Crearemos el signal **`selectedRecipe`** en el componente raíz `App` para centralizar el estado de la aplicación.
+- Conectaremos dinámicamente el `input` de `RecipeDetailComponent` para que reaccione automáticamente a los cambios de selección.
+- Añadiremos una mejora de UX usando **`window.scrollTo`** para que la página suba suavemente al detalle cuando el usuario elija una receta.
