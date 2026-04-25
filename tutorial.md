@@ -224,3 +224,35 @@ Para que nuestra aplicación tenga un aspecto profesional y sea rápida, aplicam
 - Implementaremos un diseño de tarjetas (cards) responsivo y alineado usando **Tailwind CSS (Flexbox)**.
 - Optimizaremos la carga de imágenes con **NgOptimizedImage** y recursos locales.
 - Utilizaremos el componente raíz `App` para mostrar este listado por ahora (antes de configurar las rutas).
+
+## Paso 6: Detalle de Receta (Vista individual)
+
+### Concepto Clave: Flujo de Control `@if`
+A veces queremos mostrar algo solo si se cumple una condición. En el Angular moderno usamos `@if`. Es mucho más limpio que la antigua directiva `*ngIf`.
+
+#### Estructura de un `@if`:
+```html
+@if (recetaSeleccionada) {
+  <!-- Mostrar los detalles de la receta -->
+} @else {
+  <!-- Mostrar un mensaje: "Selecciona una receta para ver más" -->
+}
+```
+
+### Nuestro Proyecto: `RecipeDetailComponent`
+Crearemos un componente para mostrar toda la información de una receta específica (la "ficha técnica"). 
+- **Ingredientes**: Usaremos un `@for` para listar cada ingrediente.
+- **Instrucciones**: Mostraremos los pasos numerados de la preparación.
+- **Diseño Detallado**: Usaremos una imagen hero (grande), tipografía clara para las instrucciones y un diseño limpio con Tailwind CSS.
+
+### Comunicación entre componentes (Avance)
+En este paso, para poder ver nuestro nuevo diseño, hemos configurado la aplicación para que muestre automáticamente la **primera receta** del listado. 
+
+**Importante**: Esto es solo una solución temporal. En el **Paso 7**, aprenderemos a conectar ambos componentes para que, al hacer clic en cualquier tarjeta del listado, el detalle se actualice dinámicamente con la receta seleccionada.
+
+### Acción realizada:
+- Crearemos el componente `RecipeDetailComponent` en `src/app/features/recipe-detail/`.
+- Implementaremos la lógica para mostrar ingredientes e instrucciones.
+- Usaremos `@if` para gestionar el estado de "receta no seleccionada".
+- Diseñaremos la vista detallada con un enfoque en la legibilidad (UX para cocina).
+- Configuraremos el componente raíz para mostrar la primera receta como demostración del diseño.
