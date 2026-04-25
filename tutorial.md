@@ -150,3 +150,27 @@ Una **Interface** es un contrato. Define qué forma debe tener un objeto. Para n
 
 ### Acción realizada:
 - Definiremos la interface `Recipe` para que nuestra aplicación sepa exactamente cómo es una receta.
+
+## Paso 4: El Primer Servicio (Gestión de datos)
+
+### Concepto Clave: ¿Qué es un Servicio?
+Si los componentes son piezas de LEGO visuales, los **Servicios** son el "motor" o el "cerebro" que está detrás. Un servicio es un lugar donde guardamos la lógica que no pertenece a una sola pieza de la interfaz, sino que debe ser compartida por toda la aplicación.
+- **Singletons**: Normalmente, un servicio es una "instancia única". Esto significa que todos los componentes que usen el servicio estarán hablando con el mismo motor y viendo los mismos datos.
+- **Inyección de Dependencias**: Es la forma en que Angular entrega el servicio a quien lo necesite. En lugar de crearlo nosotros con `new`, le decimos a Angular: "Oye, necesito el motor de recetas", y Angular nos lo da.
+
+### Nuestro Proyecto: `RecipeService`
+Crearemos un servicio centralizado para gestionar todas nuestras recetas. Este servicio usará **Signals** para que cualquier cambio en la lista de recetas se refleje instantáneamente en toda la app.
+
+#### Propiedades:
+- **`recipesState` (privado)**: Un Signal que contiene el array de recetas actual. Lo mantenemos privado para que nadie pueda modificarlo directamente desde fuera sin pasar por nuestros métodos.
+- **`recipes` (público)**: Un Signal de solo lectura (usando `computed`) que expone las recetas al resto de la aplicación.
+
+#### Métodos:
+- **`addRecipe(recipe)`**: Permite añadir una nueva receta a la lista.
+- **`deleteRecipe(id)`**: Busca una receta por su ID y la elimina de la lista.
+- **`updateRecipe(id, recipe)`**: Permite modificar los datos de una receta existente.
+
+### Acción realizada:
+- Crearemos `src/app/core/services/recipe.service.ts`.
+- Implementaremos la lógica básica para almacenar y gestionar recetas.
+- Añadiremos datos de prueba iniciales para poder trabajar en los siguientes pasos.
