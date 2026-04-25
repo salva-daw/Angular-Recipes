@@ -1,7 +1,14 @@
-<main class="container">
-  <header>
-    <h1>{{ title() }}</h1>
+<div class="min-h-screen bg-gray-50">
+  <header class="bg-white shadow-sm py-6 mb-8">
+    <div class="container mx-auto px-4">
+      <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+        {{ title() }}
+      </h1>
+    </div>
   </header>
 
-  <router-outlet />
-</main>
+  <main class="container mx-auto px-4 pb-12">
+    <app-recipe-list />
+    <router-outlet />
+  </main>
+</div>

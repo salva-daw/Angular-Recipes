@@ -174,3 +174,53 @@ Crearemos un servicio centralizado para gestionar todas nuestras recetas. Este s
 - Crearemos `src/app/core/services/recipe.service.ts`.
 - Implementaremos la lógica básica para almacenar y gestionar recetas.
 - Añadiremos datos de prueba iniciales para poder trabajar en los siguientes pasos.
+
+## Paso 5: Listado de Recetas (Uso de `@for`)
+
+### Concepto Clave: Flujo de Control Moderno (`@for`)
+En el Angular moderno, para mostrar listas de elementos usamos la sintaxis `@for`. Es mucho más rápida y fácil de leer que las versiones antiguas.
+
+#### La importancia de `track`
+Cuando usamos `@for`, Angular nos obliga a usar `track`. Esto es como ponerle una "etiqueta de identidad" a cada elemento de la lista (normalmente su `id`).
+- **¿Por qué?**: Si la lista cambia (añadimos o borramos algo), Angular solo repintará el elemento exacto que ha cambiado, en lugar de borrar y volver a dibujar toda la lista. ¡Esto hace que la app sea súper rápida!
+
+#### Estructura de un `@for`:
+```html
+@for (item of lista; track item.id) {
+  <!-- Lo que se repite -->
+} @empty {
+  <!-- Lo que se muestra si la lista está vacía -->
+}
+```
+
+### Nuestro Proyecto: `RecipeListComponent`
+Crearemos nuestro primer componente de "funcionalidad" (feature). Este componente:
+1.  **Inyectará** el `RecipeService`.
+2.  **Leerá** la lista de recetas del servicio.
+3.  **Dibujará** una tarjeta para cada receta usando `@for`.
+
+### Concepto Clave: HTML Semántico y la etiqueta `<article>`
+En el desarrollo moderno, no solo importa que la web se vea bien, sino que "tenga sentido" para las máquinas. Usamos etiquetas **semánticas** en lugar de simples `<div>`:
+- **`<article>`**: La usamos para envolver cada receta porque es una pieza de contenido autónoma e independiente. Si sacáramos esa tarjeta y la pusiéramos en otro sitio, seguiría teniendo sentido por sí sola.
+- **Beneficios**: Mejora el **SEO** (Google nos entiende mejor) y la **Accesibilidad** (los lectores de pantalla para personas con discapacidad pueden navegar fácilmente por la lista de artículos).
+
+### Estética y Rendimiento: Tailwind CSS y NgOptimizedImage
+Para que nuestra aplicación tenga un aspecto profesional y sea rápida, aplicamos dos conceptos avanzados:
+
+1.  **Tailwind CSS (v4)**: En lugar de escribir CSS personalizado en archivos separados, usamos "clases utilitarias" directamente en el HTML. Esto asegura que el diseño sea consistente y respete el "reset" del framework.
+    - Ejemplo: `class="bg-white rounded-xl shadow-md"`.
+2.  **NgOptimizedImage**: Usamos la directiva oficial de Angular para cargar las imágenes de forma eficiente.
+    - **Imágenes Locales**: Guardamos las fotos en `public/assets/images/` para evitar enlaces rotos externos.
+    - **Atributo `fill`**: Permite que la imagen se adapte perfectamente al contenedor de la tarjeta sin distorsionarse.
+    - **Prioridad**: Marcamos la primera imagen con `[priority]="true"` para que el navegador la cargue antes que nada.
+3.  **Alineación con Flexbox**: Para evitar que las tarjetas se desvíen si una receta tiene más texto que otra, usamos un truco de CSS:
+    - Aplicamos `flex-col` y `h-full` a la tarjeta para que todas midan lo mismo.
+    - Usamos `flex-grow` en el contenido central.
+    - Ponemos `mt-auto` en el pie de la tarjeta (rating y botones) para que siempre estén "empujados" hacia el fondo.
+
+### Acción realizada:
+- Crearemos el componente `RecipeListComponent` en `src/app/features/recipe-list/`.
+- Usaremos la nueva sintaxis `@for` para recorrer las recetas.
+- Implementaremos un diseño de tarjetas (cards) responsivo y alineado usando **Tailwind CSS (Flexbox)**.
+- Optimizaremos la carga de imágenes con **NgOptimizedImage** y recursos locales.
+- Utilizaremos el componente raíz `App` para mostrar este listado por ahora (antes de configurar las rutas).

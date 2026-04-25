@@ -20,7 +20,7 @@ export class RecipeService {
       ],
       category: 'lunch',
       rating: 4.8,
-      image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80'
+      image: '/assets/images/guacamole.jpg'
     },
     {
       id: '2',
@@ -34,7 +34,7 @@ export class RecipeService {
       ],
       category: 'breakfast',
       rating: 4.5,
-      image: 'https://images.unsplash.com/photo-1506084868730-345399587c65?auto=format&fit=crop&w=800&q=80'
+      image: '/assets/images/tortitas.jpg'
     }
   ]);
 
