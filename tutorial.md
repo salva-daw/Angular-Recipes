@@ -332,3 +332,23 @@ Esto mantiene los componentes hijos "tontos" (solo muestran datos) y el control 
 - **Lógica de Interacción**: Añadimos el método **`onToggleFavorite`** gestionando la propagación del evento (`stopPropagation`) para evitar conflictos con la selección de la receta.
 - **Diseño de Interfaz**: Creamos un botón interactivo "flotante" con efectos de cristal (backdrop-blur) y animaciones de escala sobre las imágenes.
 - **Feedback al Usuario**: Conectamos el evento en el componente raíz **`App`** para mostrar una respuesta inmediata cuando se interactúa con el botón.
+
+## Paso 10: Gestión Segura de Datos (Borrado de Recetas)
+
+### Concepto Clave: Integridad del Estado
+Cuando eliminamos información de una aplicación, no solo basta con borrarla de la lista principal. Debemos asegurarnos de que ninguna otra parte de la aplicación intente mostrar esos datos borrados. Esto se conoce como mantener la **Integridad del Estado**.
+
+### Nuestra Aplicación: Borrado con Confirmación
+Hemos profesionalizado el borrado de recetas siguiendo dos reglas de oro:
+
+1.  **Seguridad (Confirmación)**: Antes de ejecutar una acción irreversible, siempre pedimos permiso al usuario usando `confirm()`. Esto evita pérdidas accidentales de datos.
+2.  **Limpieza Automática (Sincronización)**: Si el usuario borra la receta que está viendo en ese momento en el detalle:
+    - El hijo (`RecipeList`) borra la receta del servicio.
+    - El hijo avisa al padre (`App`) que se ha borrado un ID concreto.
+    - El padre comprueba si ese ID es el que está seleccionado y, si es así, limpia el `selectedRecipe` poniendo su valor a `null`.
+
+### Acción realizada:
+- Implementamos la función **`confirm`** nativa para validar la intención del usuario.
+- Añadimos el output **`recipeDeleted`** para comunicar el borrado hacia arriba.
+- Creamos la lógica de sincronización en el componente **`App`** para limpiar la vista de detalle cuando sea necesario.
+- Mejoramos el flujo de datos para que el estado de la aplicación siempre sea consistente.

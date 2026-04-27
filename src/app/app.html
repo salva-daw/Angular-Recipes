@@ -17,10 +17,11 @@
         <span class="text-sm text-gray-500 font-medium">Selecciona una para ver los pasos</span>
       </header>
       
-      <!-- El listado avisa cuando se selecciona una receta o se marca favorita -->
+      <!-- El listado avisa cuando se selecciona una receta, se marca favorita o se borra -->
       <app-recipe-list 
         (recipeSelected)="onRecipeSelected($event)" 
-        (toggleFavorite)="handleToggleFavorite($event)" />
+        (toggleFavorite)="handleToggleFavorite($event)"
+        (recipeDeleted)="onRecipeDeleted($event)" />
     </div>
 
     <router-outlet />

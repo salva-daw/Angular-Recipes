@@ -28,4 +28,11 @@ export class App {
     console.log(`Receta marcada como favorita: ${recipe.title}`);
     alert(`¡Has marcado "${recipe.title}" como favorita!`);
   }
+
+  onRecipeDeleted(id: string) {
+    // Si la receta borrada es la que estamos viendo, cerramos el detalle
+    if (this.selectedRecipe()?.id === id) {
+      this.selectedRecipe.set(null);
+    }
+  }
 }

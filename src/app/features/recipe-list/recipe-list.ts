@@ -32,6 +32,7 @@ export class RecipeListComponent {
   // Definimos los outputs para avisar al padre
   recipeSelected = output<Recipe>();
   toggleFavorite = output<Recipe>();
+  recipeDeleted = output<string>(); // Avisamos al padre del ID borrado
 
   updateSearch(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -47,9 +48,15 @@ export class RecipeListComponent {
     this.toggleFavorite.emit(recipe);
   }
 
-  deleteRecipe(event: Event, id: string) {
+  deleteRecipe(event: Event, recipe: Recipe) {
     // Evitamos que el clic en el botón de borrar también seleccione la receta
     event.stopPropagation();
-    this.recipeService.deleteRecipe(id);
+    
+    const confirmed = confirm(`¿Estás seguro de que quieres eliminar la receta "${recipe.title}"?`);
+    
+    if (confirmed) {
+      this.recipeService.deleteRecipe(recipe.id);
+      this.recipeDeleted.emit(recipe.id);
+    }
   }
 }
