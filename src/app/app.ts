@@ -23,4 +23,9 @@ export class App {
     // Scroll suave hacia arriba para ver el detalle
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  handleToggleFavorite(recipe: Recipe) {
+    console.log(`Receta marcada como favorita: ${recipe.title}`);
+    alert(`¡Has marcado "${recipe.title}" como favorita!`);
+  }
 }

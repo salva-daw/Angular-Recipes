@@ -29,8 +29,9 @@ export class RecipeListComponent {
     );
   });
 
-  // Definimos el output para avisar al padre de la selección
+  // Definimos los outputs para avisar al padre
   recipeSelected = output<Recipe>();
+  toggleFavorite = output<Recipe>();
 
   updateSearch(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -39,6 +40,11 @@ export class RecipeListComponent {
 
   selectRecipe(recipe: Recipe) {
     this.recipeSelected.emit(recipe);
+  }
+
+  onToggleFavorite(event: Event, recipe: Recipe) {
+    event.stopPropagation(); // Evitamos seleccionar la receta al pulsar el corazón
+    this.toggleFavorite.emit(recipe);
   }
 
   deleteRecipe(event: Event, id: string) {

@@ -17,8 +17,10 @@
         <span class="text-sm text-gray-500 font-medium">Selecciona una para ver los pasos</span>
       </header>
       
-      <!-- El listado avisa cuando se selecciona una receta -->
-      <app-recipe-list (recipeSelected)="onRecipeSelected($event)" />
+      <!-- El listado avisa cuando se selecciona una receta o se marca favorita -->
+      <app-recipe-list 
+        (recipeSelected)="onRecipeSelected($event)" 
+        (toggleFavorite)="handleToggleFavorite($event)" />
     </div>
 
     <router-outlet />

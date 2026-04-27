@@ -304,3 +304,31 @@ Hemos implementado una barra de búsqueda que filtra las recetas por título o c
 - Usamos la función **`computed()`** para gestionar el estado derivado del filtrado.
 - Añadimos la función **`updateSearch`** para capturar los eventos del teclado y actualizar el estado de forma reactiva.
 - Optimizamos el componente para que el filtrado sea insensible a mayúsculas/minúsculas.
+
+## Paso 9: Eventos y Salidas (Función `output`)
+
+### Concepto Clave: La función `output()`
+En el Angular moderno, el decorador `@Output()` ha sido sustituido por la función **`output()`**. 
+- **Estandarización**: Sigue la misma filosofía que `input()`, eliminando el uso de decoradores para una sintaxis más limpia y funcional.
+- **Tipo de Emisión**: Por defecto, crea un `OutputEmitterRef`, que es más ligero y eficiente que un `EventEmitter` de RxJS (aunque puedes seguir usando RxJS si lo necesitas).
+
+### Flujo de Comunicación (Hijo a Padre)
+Cuando una pieza de LEGO (hijo) necesita que ocurra algo en la ciudad (padre), emite un evento.
+1.  **Hijo**: Define el canal con `nombreEvento = output<Tipo>();`.
+2.  **Hijo**: Envía el dato con `this.nombreEvento.emit(dato);`.
+3.  **Padre**: Escucha el canal en el HTML usando paréntesis `(nombreEvento)="metodo($event)"`.
+
+### Nuestra Aplicación: El Botón de Favoritos
+Hemos añadido un botón de "Corazón" en cada tarjeta de receta. 
+- Al pulsarlo, el componente hijo **no decide** qué hacer; simplemente avisa: "Oye, han marcado esta receta como favorita".
+- El componente padre recibe el aviso y lanza una alerta al usuario. 
+
+**¿Por qué hacerlo así?**
+Esto mantiene los componentes hijos "tontos" (solo muestran datos) y el control de la lógica en un solo sitio (el padre o un servicio), facilitando el mantenimiento.
+
+### Acción realizada:
+- **Enriquecimiento de datos**: Incorporamos 3 nuevas recetas completas (Pasta Carbonara, Ensalada César y Brownie) con sus respectivas imágenes locales para mejorar la consistencia visual y permitir pruebas de filtrado más realistas.
+- **Definición de Salidas**: Implementamos el output **`toggleFavorite`** en `RecipeListComponent` usando la nueva función `output()`.
+- **Lógica de Interacción**: Añadimos el método **`onToggleFavorite`** gestionando la propagación del evento (`stopPropagation`) para evitar conflictos con la selección de la receta.
+- **Diseño de Interfaz**: Creamos un botón interactivo "flotante" con efectos de cristal (backdrop-blur) y animaciones de escala sobre las imágenes.
+- **Feedback al Usuario**: Conectamos el evento en el componente raíz **`App`** para mostrar una respuesta inmediata cuando se interactúa con el botón.
