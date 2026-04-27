@@ -546,3 +546,40 @@ En lugar de crear un componente distinto para editar, lo más eficiente es reuti
 - Implementamos la lógica de carga de datos mediante **`effect`** y **`patchValue`**.
 - Añadimos un botón de **"Editar Receta"** en la vista de detalle para facilitar el flujo de usuario.
 - Refactorizamos el método de envío para soportar tanto inserciones como actualizaciones.
+
+## Paso 18: Manejo de Arrays dinámicos (`FormArray`)
+
+### Concepto Clave: Listas Dinámicas con `FormArray`
+A veces no sabemos cuántos campos va a necesitar el usuario (ej: ¿cuántos ingredientes tiene una receta?). Para estos casos, Angular ofrece **`FormArray`**.
+- Es una lista de **`FormControl`** (o de otros grupos) que puede crecer o encogerse.
+- Nos permite usar botones de "Añadir" y "Eliminar" para gestionar el tamaño de la lista en tiempo real.
+
+### Nuestra Aplicación: Ingredientes y Pasos
+Hemos dotado al formulario de total flexibilidad:
+1.  **Estructura**: Definimos `ingredients` e `instructions` como arrays dentro del `FormBuilder`.
+2.  **Iteración**: En el HTML, usamos el loop **`@for`** para dibujar un input por cada elemento del array.
+3.  **Gestión**: Implementamos los métodos `addItem()` y `removeItem()` usando funciones nativas como `push()` y `removeAt()`.
+4.  **Carga Dinámica**: Al editar una receta, el formulario ahora crea tantos campos como ingredientes/pasos tenga la receta original de forma automática.
+
+### Acción realizada:
+- Implementamos **`FormArray`** para las listas de ingredientes e instrucciones.
+- Creamos una interfaz de usuario dinámica con botones para añadir y eliminar filas.
+- Aseguramos que siempre haya al menos un elemento en cada lista para mantener la validez.
+- Sincronizamos la carga de datos en modo edición para reconstruir los arrays dinámicamente.
+
+---
+
+## 🏁 ¡Fase 4 Completada!
+
+¡Tu aplicación ha alcanzado un nivel de madurez profesional! Ya no solo consumimos datos, sino que permitimos al usuario ser el creador de contenido.
+
+### ¿Qué puede hacer nuestra aplicación ahora?
+1.  **Creación Completa**: Formulario robusto para añadir nuevas recetas con validación.
+2.  **Edición Inteligente**: Reutilización de componentes para modificar recetas existentes.
+3.  **Listas Dinámicas**: Gestión de un número ilimitado de ingredientes y pasos mediante `FormArray`.
+4.  **Feedback en Tiempo Real**: Mensajes de error claros y estados visuales (bordes rojos) según la interacción del usuario.
+5.  **Validación Robusta**: Seguridad de datos tanto en tipos (TypeScript) como en reglas de negocio (Validators).
+
+---
+
+## Fase 5: Pulido y Funciones Avanzadas

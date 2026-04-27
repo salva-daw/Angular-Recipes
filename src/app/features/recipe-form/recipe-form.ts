@@ -1,5 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy, input, effect } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { RecipeService } from '../../core/services/recipe.service';
 import { Recipe } from '../../core/models/recipe.model';
@@ -15,28 +15,44 @@ export class RecipeFormComponent {
   private recipeService = inject(RecipeService);
   private router = inject(Router);
 
-  // Recibimos el ID opcionalmente (si viene, estamos editando)
   id = input<string>();
-
-  // Título dinámico
   isEditMode = false;
 
-  // Definimos la estructura del formulario
+  // Estructura del formulario con FormArrays
   recipeForm = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
     description: ['', [Validators.required, Validators.minLength(10)]],
     category: ['lunch', [Validators.required]],
-    rating: [5, [Validators.required, Validators.min(1), Validators.max(5)]]
+    rating: [5, [Validators.required, Validators.min(1), Validators.max(5)]],
+    ingredients: this.fb.array([this.fb.control('', Validators.required)]),
+    instructions: this.fb.array([this.fb.control('', Validators.required)])
   });
 
+  // Getters para facilitar el acceso desde el template
+  get ingredients() {
+    return this.recipeForm.get('ingredients') as FormArray;
+  }
+
+  get instructions() {
+    return this.recipeForm.get('instructions') as FormArray;
+  }
+
   constructor() {
-    // Reaccionamos al cambio de ID para cargar los datos si es edición
     effect(() => {
       const recipeId = this.id();
       if (recipeId) {
         const recipe = this.recipeService.recipes().find(r => r.id === recipeId);
         if (recipe) {
           this.isEditMode = true;
+          
+          // Limpiamos los arrays por defecto antes de cargar los de la receta
+          this.ingredients.clear();
+          this.instructions.clear();
+
+          // Añadimos un control por cada ingrediente/instrucción
+          recipe.ingredients.forEach(ing => this.ingredients.push(this.fb.control(ing, Validators.required)));
+          recipe.instructions.forEach(ins => this.instructions.push(this.fb.control(ins, Validators.required)));
+
           this.recipeForm.patchValue({
             title: recipe.title,
             description: recipe.description,
@@ -48,7 +64,17 @@ export class RecipeFormComponent {
     });
   }
 
-  // Método auxiliar para mostrar errores solo cuando el usuario ha interactuado
+  // Métodos para gestionar los elementos de los arrays
+  addItem(array: FormArray) {
+    array.push(this.fb.control('', Validators.required));
+  }
+
+  removeItem(array: FormArray, index: number) {
+    if (array.length > 1) {
+      array.removeAt(index);
+    }
+  }
+
   isFieldInvalid(fieldName: string): boolean {
     const control = this.recipeForm.get(fieldName);
     return !!(control && control.invalid && (control.dirty || control.touched));
@@ -59,30 +85,20 @@ export class RecipeFormComponent {
       const formValue = this.recipeForm.value;
       const recipeId = this.id();
 
+      const recipeData: Recipe = {
+        id: this.isEditMode && recipeId ? recipeId : crypto.randomUUID(),
+        title: formValue.title ?? '',
+        description: formValue.description ?? '',
+        category: (formValue.category as Recipe['category']) ?? 'lunch',
+        rating: formValue.rating ?? 5,
+        ingredients: (formValue.ingredients as string[]) ?? [],
+        instructions: (formValue.instructions as string[]) ?? []
+      };
+
       if (this.isEditMode && recipeId) {
-        // Obtenemos la receta original para no perder ingredientes/instrucciones
-        const originalRecipe = this.recipeService.recipes().find(r => r.id === recipeId);
-        if (originalRecipe) {
-          const updatedRecipe: Recipe = {
-            ...originalRecipe,
-            title: formValue.title ?? originalRecipe.title,
-            description: formValue.description ?? originalRecipe.description,
-            category: (formValue.category as Recipe['category']) ?? originalRecipe.category,
-            rating: formValue.rating ?? originalRecipe.rating
-          };
-          this.recipeService.updateRecipe(recipeId, updatedRecipe);
-        }
+        this.recipeService.updateRecipe(recipeId, recipeData);
       } else {
-        const newRecipe: Recipe = {
-          id: crypto.randomUUID(),
-          title: formValue.title ?? '',
-          description: formValue.description ?? '',
-          category: (formValue.category as Recipe['category']) ?? 'lunch',
-          rating: formValue.rating ?? 5,
-          ingredients: [],
-          instructions: []
-        };
-        this.recipeService.addRecipe(newRecipe);
+        this.recipeService.addRecipe(recipeData);
       }
       
       this.router.navigate(['/']);

@@ -54,6 +54,59 @@
       </div>
     </div>
 
+    <!-- Ingredientes (FormArray) -->
+    <div formArrayName="ingredients" class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Ingredientes</h3>
+        <button type="button" (click)="addItem(ingredients)"
+                class="text-amber-600 hover:text-amber-700 text-sm font-bold flex items-center gap-1 transition-colors">
+          <span>➕</span> Añadir ingrediente
+        </button>
+      </div>
+      
+      @for (ctrl of ingredients.controls; track $index) {
+        <div class="flex gap-2">
+          <input type="text" [formControlName]="$index"
+                 placeholder="Ej. 200g de harina"
+                 class="flex-grow px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all">
+          @if (ingredients.length > 1) {
+            <button type="button" (click)="removeItem(ingredients, $index)"
+                    class="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+              🗑️
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Instrucciones (FormArray) -->
+    <div formArrayName="instructions" class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Preparación (paso a paso)</h3>
+        <button type="button" (click)="addItem(instructions)"
+                class="text-amber-600 hover:text-amber-700 text-sm font-bold flex items-center gap-1 transition-colors">
+          <span>➕</span> Añadir paso
+        </button>
+      </div>
+      
+      @for (ctrl of instructions.controls; track $index) {
+        <div class="flex gap-2">
+          <span class="flex-shrink-0 w-10 h-10 bg-gray-100 text-gray-500 rounded-full flex items-center justify-center font-bold text-xs mt-1">
+            {{ $index + 1 }}
+          </span>
+          <textarea [formControlName]="$index" rows="2"
+                    placeholder="Describe este paso de la receta..."
+                    class="flex-grow px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all resize-none"></textarea>
+          @if (instructions.length > 1) {
+            <button type="button" (click)="removeItem(instructions, $index)"
+                    class="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+              🗑️
+            </button>
+          }
+        </div>
+      }
+    </div>
+
     <!-- Botón Enviar -->
     <button type="submit" 
             [disabled]="recipeForm.invalid"
