@@ -15,6 +15,11 @@ export const routes: Routes = [
     title: 'Añadir Receta'
   },
   {
+    path: 'edit/:id',
+    component: RecipeFormComponent,
+    title: 'Editar Receta'
+  },
+  {
     path: 'recipe/:id',
     component: RecipeDetailComponent,
     title: 'Detalle de Receta'

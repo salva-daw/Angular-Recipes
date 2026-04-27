@@ -523,3 +523,26 @@ Son funciones que comprueban reglas. Hemos usado:
 - Añadimos feedback visual mediante **clases dinámicas** de Tailwind (bordes rojos).
 - Usamos el flujo de control **`@if`** para mostrar mensajes explicativos personalizados debajo de cada input.
 - Reforzamos la seguridad deshabilitando el botón de envío si existen errores de validación.
+
+> **Nota:** La gestión de ingredientes e instrucciones se implementará en el **Paso 18**. Estos campos requieren el uso de **FormArray** para permitir la creación de listas dinámicas de elementos, una funcionalidad avanzada que se abordará una vez asentados los conceptos básicos de los formularios reactivos.
+
+## Paso 17: Edición de Recetas (Reutilización de Componentes)
+
+### Concepto Clave: Reutilización de Formularios
+En lugar de crear un componente distinto para editar, lo más eficiente es reutilizar el formulario de creación. Para ello, el componente debe ser capaz de detectar si está en modo "Añadir" o "Editar".
+
+### Lógica de Detección (Modo Edición)
+1.  **Parámetro en Ruta**: Añadimos la ruta `edit/:id` vinculada al mismo componente.
+2.  **Input `id`**: Al igual que en el detalle, recibimos el ID desde la URL.
+3.  **Efecto Reactivo (`effect`)**: Usamos un `effect` que vigila el `id()`. Si existe, busca la receta y rellena el formulario automáticamente usando **`patchValue`**.
+
+### Nuestra Aplicación: El Formulario Inteligente
+- **Carga de Datos**: Al entrar a editar, el formulario ya no aparece vacío, sino con los datos actuales de la receta.
+- **Diferenciación de Acciones**: El método `onSubmit` comprueba un flag (`isEditMode`) para decidir si debe llamar a `addRecipe` (crear) o a `updateRecipe` (actualizar).
+- **Interfaz Adaptable**: El título de la página y el texto del botón cambian dinámicamente para reflejar la acción del usuario.
+
+### Acción realizada:
+- Creamos la ruta dinámica **`/edit/:id`** en el router.
+- Implementamos la lógica de carga de datos mediante **`effect`** y **`patchValue`**.
+- Añadimos un botón de **"Editar Receta"** en la vista de detalle para facilitar el flujo de usuario.
+- Refactorizamos el método de envío para soportar tanto inserciones como actualizaciones.

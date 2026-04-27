@@ -18,6 +18,10 @@
              class="px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white rounded-xl text-sm font-bold transition-all border border-white/30">
             ← Volver al listado
           </a>
+          <a [routerLink]="['/edit', r.id]" 
+             class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-bold transition-all shadow-lg border border-amber-400">
+            Edit Receta ✏️
+          </a>
         </div>
         <h2 class="text-3xl md:text-5xl font-extrabold text-white">{{ r.title }}</h2>
       </div>
