@@ -279,3 +279,28 @@ Modificaremos el listado para que las tarjetas sean clicables. Al pulsar una, el
 - Crearemos el signal **`selectedRecipe`** en el componente raíz `App` para centralizar el estado de la aplicación.
 - Conectaremos dinámicamente el `input` de `RecipeDetailComponent` para que reaccione automáticamente a los cambios de selección.
 - Añadiremos una mejora de UX usando **`window.scrollTo`** para que la página suba suavemente al detalle cuando el usuario elija una receta.
+
+## Paso 8: Computed Signals (Filtrado automático)
+
+### Concepto Clave: El Signal Derivado (`computed`)
+A veces necesitamos un valor que dependa de otros. En lugar de calcularlo manualmente cada vez, usamos **`computed()`**.
+- **Reactividad inteligente**: Un `computed` solo se vuelve a calcular si alguno de los Signals que lee (sus "dependencias") cambia.
+- **Solo lectura**: No puedes hacer `.set()` en un `computed`. Su valor es el resultado automático de su lógica interna.
+- **Rendimiento**: Si el valor no ha cambiado realmente, Angular no avisará a la interfaz, ahorrando trabajo de renderizado.
+
+### Nuestra Aplicación: El Buscador en Tiempo Real
+Hemos implementado una barra de búsqueda que filtra las recetas por título o categoría.
+
+#### La lógica:
+1.  **`searchTerm`**: Un Signal de tipo `string` que guarda lo que el usuario escribe.
+2.  **`filteredRecipes`**: Un Signal de tipo `computed` que:
+    - Lee `searchTerm()`.
+    - Lee `recipes()` del servicio.
+    - Devuelve una nueva lista filtrada.
+3.  **Template**: El `@for` ahora recorre `filteredRecipes()` en lugar de la lista completa.
+
+### Acción realizada:
+- Implementamos una barra de búsqueda con diseño moderno (iconos y efectos de foco).
+- Usamos la función **`computed()`** para gestionar el estado derivado del filtrado.
+- Añadimos la función **`updateSearch`** para capturar los eventos del teclado y actualizar el estado de forma reactiva.
+- Optimizamos el componente para que el filtrado sea insensible a mayúsculas/minúsculas.

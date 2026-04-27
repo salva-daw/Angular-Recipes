@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy, output } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, output, signal, computed } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { RecipeService } from '../../core/services/recipe.service';
 import { Recipe } from '../../core/models/recipe.model';
@@ -13,11 +13,29 @@ import { Recipe } from '../../core/models/recipe.model';
 export class RecipeListComponent {
   private recipeService = inject(RecipeService);
   
-  // Accedemos al signal de recetas del servicio
-  public recipes = this.recipeService.recipes;
+  // Término de búsqueda (Signal reactivo)
+  searchTerm = signal('');
+
+  // Signal derivado: se actualiza automáticamente cuando cambia searchTerm o las recetas del servicio
+  filteredRecipes = computed(() => {
+    const term = this.searchTerm().toLowerCase();
+    const allRecipes = this.recipeService.recipes();
+    
+    if (!term) return allRecipes;
+
+    return allRecipes.filter(recipe => 
+      recipe.title.toLowerCase().includes(term) || 
+      recipe.category.toLowerCase().includes(term)
+    );
+  });
 
   // Definimos el output para avisar al padre de la selección
   recipeSelected = output<Recipe>();
+
+  updateSearch(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.searchTerm.set(input.value);
+  }
 
   selectRecipe(recipe: Recipe) {
     this.recipeSelected.emit(recipe);
