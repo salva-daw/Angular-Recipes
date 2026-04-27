@@ -1,5 +1,6 @@
 import { Component, inject, ChangeDetectionStrategy, output, signal, computed } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
+import { Router } from '@angular/router';
 import { RecipeService } from '../../core/services/recipe.service';
 import { Recipe } from '../../core/models/recipe.model';
 
@@ -12,6 +13,7 @@ import { Recipe } from '../../core/models/recipe.model';
 })
 export class RecipeListComponent {
   private recipeService = inject(RecipeService);
+  private router = inject(Router);
   
   // Término de búsqueda (Signal reactivo)
   searchTerm = signal('');
@@ -29,10 +31,10 @@ export class RecipeListComponent {
     );
   });
 
-  // Definimos los outputs para avisar al padre
+  // Definimos los outputs
   recipeSelected = output<Recipe>();
   toggleFavorite = output<Recipe>();
-  recipeDeleted = output<string>(); // Avisamos al padre del ID borrado
+  recipeDeleted = output<string>();
 
   updateSearch(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -40,7 +42,11 @@ export class RecipeListComponent {
   }
 
   selectRecipe(recipe: Recipe) {
+    // 1. Avisamos que se seleccionó (por si algún padre aún escucha)
     this.recipeSelected.emit(recipe);
+    
+    // 2. Navegamos programáticamente a la ruta de detalle
+    this.router.navigate(['/recipe', recipe.id]);
   }
 
   onToggleFavorite(event: Event, recipe: Recipe) {

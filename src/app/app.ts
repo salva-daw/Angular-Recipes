@@ -1,38 +1,12 @@
-import { Component, signal, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { RecipeListComponent } from './features/recipe-list/recipe-list';
-import { RecipeDetailComponent } from './features/recipe-detail/recipe-detail';
-import { RecipeService } from './core/services/recipe.service';
-import { Recipe } from './core/models/recipe.model';
+import { Component, signal } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RecipeListComponent, RecipeDetailComponent],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
-  private recipeService = inject(RecipeService);
   protected readonly title = signal('Smart Recipe Box');
-  
-  // Estado para la receta seleccionada (empieza como null)
-  protected selectedRecipe = signal<Recipe | null>(null);
-
-  onRecipeSelected(recipe: Recipe) {
-    this.selectedRecipe.set(recipe);
-    // Scroll suave hacia arriba para ver el detalle
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  handleToggleFavorite(recipe: Recipe) {
-    console.log(`Receta marcada como favorita: ${recipe.title}`);
-    alert(`¡Has marcado "${recipe.title}" como favorita!`);
-  }
-
-  onRecipeDeleted(id: string) {
-    // Si la receta borrada es la que estamos viendo, cerramos el detalle
-    if (this.selectedRecipe()?.id === id) {
-      this.selectedRecipe.set(null);
-    }
-  }
 }

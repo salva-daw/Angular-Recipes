@@ -1,29 +1,24 @@
 <div class="min-h-screen bg-gray-50">
-  <header class="bg-white shadow-sm py-6 mb-8">
-    <div class="container mx-auto px-4 text-center md:text-left">
-      <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600 tracking-tight">
+  <header class="bg-white shadow-sm py-6 mb-8 border-b border-gray-100">
+    <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+      <a routerLink="/" 
+         class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600 tracking-tight hover:opacity-80 transition-opacity">
         {{ title() }}
-      </h1>
+      </a>
+      
+      <nav class="flex items-center gap-6">
+        <a routerLink="/" 
+           routerLinkActive="text-amber-600 font-bold border-b-2 border-amber-500"
+           [routerLinkActiveOptions]="{exact: true}"
+           class="text-gray-600 hover:text-amber-500 transition-colors py-1 px-2 text-sm uppercase tracking-wider">
+          Explorar
+        </a>
+      </nav>
     </div>
   </header>
 
   <main class="container mx-auto px-4 pb-12">
-    <!-- El detalle recibe la receta seleccionada -->
-    <app-recipe-detail [recipe]="selectedRecipe()" />
-    
-    <div class="mt-12 pt-12 border-t border-gray-200">
-      <header class="flex items-center justify-between mb-8 px-4">
-        <h2 class="text-2xl font-bold text-gray-900">Descubre nuevas recetas</h2>
-        <span class="text-sm text-gray-500 font-medium">Selecciona una para ver los pasos</span>
-      </header>
-      
-      <!-- El listado avisa cuando se selecciona una receta, se marca favorita o se borra -->
-      <app-recipe-list 
-        (recipeSelected)="onRecipeSelected($event)" 
-        (toggleFavorite)="handleToggleFavorite($event)"
-        (recipeDeleted)="onRecipeDeleted($event)" />
-    </div>
-
+    <!-- Angular cargará aquí el componente que corresponda a la URL -->
     <router-outlet />
   </main>
 </div>

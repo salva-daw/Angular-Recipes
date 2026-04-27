@@ -225,6 +225,21 @@ Para que nuestra aplicación tenga un aspecto profesional y sea rápida, aplicam
 - Optimizaremos la carga de imágenes con **NgOptimizedImage** y recursos locales.
 - Utilizaremos el componente raíz `App` para mostrar este listado por ahora (antes de configurar las rutas).
 
+---
+
+## 🏁 ¡Fase 1 Completada!
+
+¡Enhorabuena! Has sentado las bases de una arquitectura Angular moderna y profesional. Tu proyecto ya no es solo una página vacía, sino el esqueleto de una aplicación robusta.
+
+### ¿Qué puede hacer nuestra aplicación ahora?
+1.  **Arquitectura Limpia**: Los archivos están organizados por responsabilidades (`core`, `features`).
+2.  **Estado Centralizado**: El `RecipeService` gestiona los datos de forma global y reactiva.
+3.  **Visualización de Datos**: Somos capaces de transformar una lista de objetos en una interfaz visual atractiva.
+4.  **Optimización de Recursos**: Las imágenes se cargan de forma eficiente desde el primer momento.
+5.  **Fundamentos de Signals**: La aplicación ya utiliza el nuevo motor de reactividad de Angular.
+
+---
+
 ## Paso 6: Detalle de Receta (Vista individual)
 
 ### Concepto Clave: Flujo de Control `@if`
@@ -352,3 +367,113 @@ Hemos profesionalizado el borrado de recetas siguiendo dos reglas de oro:
 - Añadimos el output **`recipeDeleted`** para comunicar el borrado hacia arriba.
 - Creamos la lógica de sincronización en el componente **`App`** para limpiar la vista de detalle cuando sea necesario.
 - Mejoramos el flujo de datos para que el estado de la aplicación siempre sea consistente.
+
+---
+
+## 🏁 ¡Fase 2 Completada!
+
+Hemos cerrado la base de la interactividad de nuestra aplicación. En este punto, tu **Smart Recipe Box** ya es una aplicación funcional donde los datos fluyen de forma reactiva y eficiente.
+
+### ¿Qué puede hacer nuestra aplicación ahora?
+1.  **Listado Dinámico**: Muestra recetas con un diseño profesional y optimizado.
+2.  **Búsqueda Inteligente**: Filtrado en tiempo real usando `computed()` signals.
+3.  **Visualización Detallada**: Los componentes se comunican mediante `input()` para mostrar la ficha completa de una receta.
+4.  **Interacción Avanzada**: Uso de `output()` para gestionar favoritos y avisos al componente padre.
+5.  **Gestión de Estado**: Borrado seguro de datos con sincronización de la interfaz.
+
+---
+
+## Fase 3: Navegación y Rutas
+
+## Paso 11: Configuración del Router
+
+### Concepto Clave: ¿Qué es el Routing?
+Angular es un framework para crear **SPAs** (*Single Page Applications*). Esto significa que el navegador nunca recarga la página completa; en su lugar, el **Router** intercepta la URL y decide qué componente debe mostrarse en pantalla.
+- **`Routes`**: Es una lista de objetos que empareja una "dirección" (path) con un "componente".
+- **`<router-outlet>`**: Es un marcador de posición. Es el lugar donde Angular "inyectará" el componente que coincida con la URL actual.
+
+### Nuestra Aplicación: La Estructura de Navegación
+Hemos pasado de un diseño donde todo estaba en la misma pantalla a uno dividido por URLs:
+1.  **Ruta Principal (`''`)**: Muestra el `RecipeListComponent`. Es lo primero que ve el usuario.
+2.  **Ruta de Detalle (`'recipe/:id'`)**: Muestra el `RecipeDetailComponent`. El `:id` es un parámetro dinámico que usaremos para saber qué receta cargar.
+3.  **Comodín (`'**'`)**: Si el usuario escribe una dirección que no existe, lo redirigimos automáticamente al listado.
+
+### Acción realizada:
+- Configuramos el archivo **`app.routes.ts`** con la tabla de navegación.
+- Simplificamos el componente raíz **`App`**, eliminando la lógica de selección manual de la Fase 2 para delegar el control al Router.
+- Sustituimos las etiquetas directas de los componentes por el componente **`<router-outlet />`** en el HTML principal.
+
+## Paso 12: Navegación Programática
+
+### Concepto Clave: ¿Cómo navegamos en Angular?
+Existen dos formas principales de cambiar de página:
+1.  **Desde el HTML (`routerLink`)**: Es como un enlace tradicional de toda la vida (`<a routerLink="/perfil">`). Es la mejor opción para menús y botones estáticos.
+2.  **Desde el código (`router.navigate`)**: Se llama **Navegación Programática**. La usamos cuando queremos que la navegación ocurra después de hacer algo (como validar un clic o guardar datos).
+
+### Nuestra Aplicación: De la Selección a la Navegación
+Antes, al hacer clic en una receta, el componente raíz simplemente "abría" el detalle en la misma página. Ahora, queremos que "viaje" a una nueva URL.
+- **`inject(Router)`**: Pedimos a Angular que nos dé el motor de navegación.
+- **`this.router.navigate(['/recipe', id])`**: Le decimos al motor que nos lleve a la ruta de detalle, pasando el ID de la receta como parte de la dirección.
+
+### Acción realizada:
+- Inyectamos el servicio **`Router`** en `RecipeListComponent`.
+- Modificamos el método **`selectRecipe`** para que dispare el cambio de URL.
+- Explicamos la ventaja de la navegación programática para flujos de usuario complejos.
+
+## Paso 13: Parámetros de Ruta
+
+### Concepto Clave: Parámetros Dinámicos
+Una URL como `/recipe/1` contiene información variable. En la configuración de rutas (`app.routes.ts`), definimos esto usando dos puntos: `path: 'recipe/:id'`. 
+Ese `:id` es un **parámetro**, y Angular nos permite leerlo para saber qué contenido mostrar.
+
+### Técnica Moderna: `withComponentInputBinding`
+Antiguamente, para leer un parámetro teníamos que inyectar `ActivatedRoute` y suscribirnos a un observable. En el Angular actual:
+1.  Habilitamos `withComponentInputBinding()` en el archivo de configuración.
+2.  Definimos un **`input()`** con el mismo nombre que el parámetro (ej: `id`).
+3.  ¡Angular se encarga de inyectar el valor automáticamente!
+
+### Nuestra Aplicación: Recuperando la Receta
+Hemos modificado el detalle para que sea totalmente autónomo:
+- **Input `id`**: Recibe el identificador desde la URL.
+- **Computed `recipe`**: Cada vez que el ID cambia, busca automáticamente la receta correcta en el `RecipeService`.
+- **Navegación de vuelta**: Añadimos un botón "Volver" usando **`routerLink`** para regresar al listado con un solo clic.
+
+### Acción realizada:
+- Habilitamos la vinculación de parámetros a inputs en **`app.config.ts`**.
+- Refactorizamos **`RecipeDetailComponent`** para que recupere los datos basándose en el ID de la URL.
+- Implementamos el botón de navegación hacia atrás con estilos integrados en la cabecera hero.
+
+## Paso 14: Enlaces Activos y Estilos
+
+### Concepto Clave: `routerLinkActive`
+¿Cómo sabe el usuario en qué página está? Angular nos da la directiva **`routerLinkActive`**. 
+Esta directiva añade automáticamente una clase CSS a un enlace cuando su dirección coincide con la URL actual del navegador.
+- **`[routerLinkActiveOptions]="{exact: true}"`**: Es vital cuando enlazamos a la raíz (`/`). Si no lo ponemos, Angular pensará que estamos en "Explorar" incluso cuando estemos viendo el detalle de una receta, porque `/` es el inicio de todas las rutas.
+
+### Nuestra Aplicación: Una Cabecera Funcional
+Hemos transformado el simple título en una barra de navegación (Navbar) real:
+- **Logo clicable**: El título ahora nos lleva al inicio desde cualquier parte de la app.
+- **Menú de Navegación**: Añadimos una sección de "Explorar" que se ilumina con una línea inferior (border-b-2) cuando estamos en el listado.
+- **Transiciones**: Usamos Tailwind para que los cambios de color sean suaves (`transition-colors`).
+
+### Acción realizada:
+- Importamos **`RouterLinkActive`** en el componente raíz.
+- Diseñamos una cabecera responsiva con soporte para enlaces activos.
+- Implementamos la lógica de coincidencia exacta (`exact: true`) para una navegación precisa.
+
+---
+
+## 🏁 ¡Fase 3 Completada!
+
+¡Nuestra aplicación ya es una SPA completa! Hemos pasado de una vista estática a un sistema de navegación dinámico basado en URLs.
+
+### ¿Qué puede hacer nuestra aplicación ahora?
+1.  **Navegación entre Páginas**: Podemos movernos entre el listado y el detalle sin recargar el navegador.
+2.  **URLs Únicas**: Cada receta tiene su propia dirección (ej. `/recipe/2`), lo que permite marcarlas como favoritas o compartirlas.
+3.  **Estado Visual**: La cabecera indica claramente en qué sección nos encontramos.
+4.  **Carga Inteligente de Datos**: El detalle de la receta es capaz de "autorrecuperarse" leyendo el ID de la URL.
+5.  **Navegación Programática**: Hemos aprendido a controlar el navegador desde el código TypeScript.
+
+---
+
+## Fase 4: Formularios y Datos de Usuario
