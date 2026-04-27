@@ -291,7 +291,7 @@ Modificaremos el listado para que las tarjetas sean clicables. Al pulsar una, el
 ### Acción realizada:
 - Usaremos la función **`output()`** en `RecipeListComponent` para emitir la receta seleccionada.
 - Implementaremos la captura del evento de clic en las tarjetas, utilizando **`event.stopPropagation()`** en el botón de eliminar para evitar conflictos entre acciones.
-- Crearemos el signal **`selectedRecipe`** en el componente raíz `App` para centralizar el estado de la aplicación.
+- Creamos el signal **`selectedRecipe`** en el componente raíz `App` para centralizar el estado de la aplicación.
 - Conectaremos dinámicamente el `input` de `RecipeDetailComponent` para que reaccione automáticamente a los cambios de selección.
 - Añadiremos una mejora de UX usando **`window.scrollTo`** para que la página suba suavemente al detalle cuando el usuario elija una receta.
 
@@ -477,3 +477,49 @@ Hemos transformado el simple título en una barra de navegación (Navbar) real:
 ---
 
 ## Fase 4: Formularios y Datos de Usuario
+
+## Paso 15: Introducción a Formularios Reactivos
+
+### Concepto Clave: Formularios Reactivos vs. Template-driven
+Angular ofrece dos formas de manejar formularios:
+1.  **Template-driven**: La lógica está en el HTML (fácil para cosas muy simples).
+2.  **Reactivos (Recomendado)**: La lógica vive en el TypeScript. Esto nos da un control total, permite validaciones complejas y facilita las pruebas unitarias.
+
+### Los 3 pilares de los Formularios Reactivos:
+- **`FormControl`**: Representa un único campo de entrada (un input).
+- **`FormGroup`**: Un grupo de campos (un objeto que contiene inputs).
+- **`FormBuilder`**: Un servicio que nos ayuda a crear grupos de campos de forma mucho más rápida y legible.
+
+### Nuestra Aplicación: El Formulario de Nueva Receta
+Hemos creado un formulario para dar de alta recetas:
+- **Estado Sincronizado**: Lo que el usuario escribe se refleja al instante en el objeto `recipeForm` de nuestro código.
+- **Validación Básica**: El botón de "Crear Receta" permanece desactivado hasta que el formulario es válido (campos rellenos y con el formato correcto).
+- **Inyección de Dependencias**: Usamos `inject(FormBuilder)` para estructurar los campos de título, descripción, categoría y puntuación.
+
+### Acción realizada:
+- Creamos el nuevo componente **`RecipeFormComponent`**.
+- Configuramos la ruta **`/add`** en el sistema de navegación.
+- Implementamos el formulario usando **`FormGroup`** y capturamos los datos para guardarlos en el servicio.
+- Añadimos un botón de acceso directo en la cabecera principal.
+
+## Paso 16: Validaciones de Formulario
+
+### Concepto Clave: El Ciclo de Vida del Input
+Para no agobiar al usuario con errores antes de que empiece a escribir, Angular rastrea el estado de cada campo:
+- **`pristine` / `dirty`**: ¿El usuario ha escrito algo ya o el campo está "virgen"?
+- **`untouched` / `touched`**: ¿El usuario ha entrado y salido del campo?
+- **`valid` / `invalid`**: ¿Cumple con las reglas (Validators)?
+
+**Buena Práctica de UX**: Solo mostramos el error si el campo es **`invalid`** Y el usuario ya ha interactuado con él (**`touched`** o **`dirty`**).
+
+### Los Validadores (`Validators`)
+Son funciones que comprueban reglas. Hemos usado:
+- **`Validators.required`**: El campo no puede estar vacío.
+- **`Validators.minLength(n)`**: Exige un número mínimo de caracteres.
+- **`Validators.min(n)` / `Validators.max(n)`**: Controla los rangos numéricos (ej. para el rating).
+
+### Acción realizada:
+- Implementamos el método **`isFieldInvalid`** para centralizar la lógica de visualización de errores.
+- Añadimos feedback visual mediante **clases dinámicas** de Tailwind (bordes rojos).
+- Usamos el flujo de control **`@if`** para mostrar mensajes explicativos personalizados debajo de cada input.
+- Reforzamos la seguridad deshabilitando el botón de envío si existen errores de validación.
