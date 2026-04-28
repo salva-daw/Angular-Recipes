@@ -583,3 +583,27 @@ Hemos dotado al formulario de total flexibilidad:
 ---
 
 ## Fase 5: Pulido y Funciones Avanzadas
+
+## Paso 19: Efectos (`effect`) y Local Storage
+
+### Concepto Clave 1: Angular Effects (`effect`)
+Un **`effect()`** es una función que se ejecuta cada vez que uno o más Signals dentro de ella cambian de valor. Es la forma en que Angular maneja los "efectos secundarios" (side effects).
+- **Reactividad Automática**: No necesitas llamar al efecto manualmente; Angular vigila los signals por ti.
+- **Casos de uso**: Sincronizar datos con el almacenamiento local, realizar registros (logging) o interactuar con librerías externas que no son de Angular.
+- **Seguridad**: Los efectos solo se pueden crear en un "contexto de inyección" (como el constructor de un servicio o componente).
+
+### Concepto Clave 2: Local Storage (Persistencia en el Navegador)
+Para que nuestra aplicación no "olvide" las recetas al refrescar la página, usamos el **`localStorage`**. Es un pequeño almacén de datos que vive en el navegador del usuario.
+- **Persistencia**: Los datos se mantienen incluso si cierras el navegador.
+- **Formato Texto**: Solo permite guardar texto, por lo que usamos `JSON.stringify()` para guardar objetos y `JSON.parse()` para leerlos.
+
+### Nuestra Aplicación: El Recetario Persistente
+Hemos transformado el `RecipeService` para que sea inteligente:
+1.  **Carga Inteligente**: Al arrancar, el servicio mira si hay datos guardados. Si no hay nada (primera vez), carga las recetas por defecto (`INITIAL_RECIPES`).
+2.  **Guardado Invisible**: Gracias al `effect()`, no hemos tenido que añadir lógica de guardado en cada método (`add`, `delete`, `update`). El efecto "vigila" el estado y, en cuanto detecta un cambio, hace una copia de seguridad en el `localStorage`.
+
+### Acción realizada:
+- Refactorizamos **`RecipeService`** para extraer los datos iniciales a una constante.
+- Implementamos el método privado **`loadFromStorage`** para la inicialización del estado.
+- Creamos un **`effect`** en el constructor que sincroniza automáticamente el Signal `recipesState` con la clave `recipes_data` del navegador.
+- Aseguramos que la aplicación mantenga la integridad de los datos incluso tras recargas completas del navegador.
