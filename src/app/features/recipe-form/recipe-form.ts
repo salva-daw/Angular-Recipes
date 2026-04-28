@@ -2,6 +2,7 @@ import { Component, inject, ChangeDetectionStrategy, input, effect } from '@angu
 import { ReactiveFormsModule, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { RecipeService } from '../../core/services/recipe.service';
+import { NotificationService } from '../../core/services/notification.service';
 import { Recipe } from '../../core/models/recipe.model';
 
 @Component({
@@ -13,6 +14,7 @@ import { Recipe } from '../../core/models/recipe.model';
 export class RecipeFormComponent {
   private fb = inject(FormBuilder);
   private recipeService = inject(RecipeService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
 
   id = input<string>();
@@ -97,8 +99,10 @@ export class RecipeFormComponent {
 
       if (this.isEditMode && recipeId) {
         this.recipeService.updateRecipe(recipeId, recipeData);
+        this.notificationService.show('Receta actualizada con éxito');
       } else {
         this.recipeService.addRecipe(recipeData);
+        this.notificationService.show('¡Receta creada con éxito!');
       }
       
       this.router.navigate(['/']);

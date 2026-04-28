@@ -607,3 +607,51 @@ Hemos transformado el `RecipeService` para que sea inteligente:
 - Implementamos el método privado **`loadFromStorage`** para la inicialización del estado.
 - Creamos un **`effect`** en el constructor que sincroniza automáticamente el Signal `recipesState` con la clave `recipes_data` del navegador.
 - Aseguramos que la aplicación mantenga la integridad de los datos incluso tras recargas completas del navegador.
+
+## Paso 20: Mejoras de UI/UX y Animaciones Nativas (Angular 21)
+
+Este paso ha sido una transformación profunda de la "sensación" de la aplicación. Hemos pasado de una app funcional a una que se comunica activamente con el usuario y utiliza el último estándar de **Angular 21** para el rendimiento visual.
+
+### 1. El Sistema de Notificaciones (Toasts)
+Hemos implementado un sistema de mensajería no intrusivo que informa al usuario sobre el éxito o fracaso de sus acciones.
+
+*   **`NotificationService`**: Es el cerebro del sistema. Utiliza un **Signal** (`notifications`) que almacena un array de objetos. 
+    *   Cada mensaje tiene un `id` único generado con `crypto.randomUUID()`.
+    *   Implementamos una lógica de **auto-eliminación**: al mostrar una notificación, un `setTimeout` se encarga de quitarla automáticamente tras 3 segundos.
+*   **`ToastContainerComponent`**: Un componente global posicionado con CSS (`fixed top-4 right-4`) que utiliza Tailwind CSS para mostrar alertas con bordes de colores, sombras y desenfoque de fondo.
+
+### 2. Animaciones Nativas con `animate.enter`
+Angular 21 introduce un cambio de paradigma: se aleja del motor de animaciones basado en JavaScript (`@angular/animations`) en favor de las **Animaciones CSS Nativas**.
+
+*   **Rendimiento Superior**: Las animaciones se ejecutan directamente en la GPU del navegador, eliminando la sobrecarga de JavaScript.
+*   **Sintaxis `animate.enter`**: Utilizamos esta nueva directiva del compilador para detectar cuándo un elemento entra en el DOM (como en un `@for`).
+*   **Efecto "Stagger" (Cascada) con CSS Variables**: En lugar de funciones complejas de Angular, usamos una variable CSS `--index` y la función `calc()` en nuestro archivo de estilos:
+    ```css
+    /* recipe-list.css */
+    .fade-slide-up {
+        animation: fadeSlideUp 0.4s ease-out both;
+        animation-delay: calc(var(--index) * 100ms);
+    }
+    ```
+*   **Implementación en el HTML**:
+    ```html
+    @for (recipe of filteredRecipes(); track recipe.id) {
+      <article animate.enter="fade-slide-up" [style.--index]="$index" ...>
+    }
+    ```
+
+### 3. Integración en el Flujo de Datos
+Hemos conectado las notificaciones en toda la aplicación:
+*   **Borrado**: Al eliminar una receta, disparamos un aviso de "Éxito".
+*   **Favoritos**: Al pulsar el corazón, confirmamos la acción con una notificación de información.
+*   **Formulario**: Al crear o editar recetas, el usuario recibe confirmación visual antes de la redirección.
+
+### 4. Mejora del "Estado Vacío" (Empty State)
+Hemos optimizado la experiencia cuando no hay resultados de búsqueda, mostrando un diseño dedicado con icono, mensaje explicativo y un botón para limpiar el filtro.
+
+### Acción realizada:
+- Creamos el **`NotificationService`** y el componente **`ToastContainerComponent`**.
+- Migramos el listado de recetas al nuevo sistema de **Animaciones Nativas de Angular 21**, eliminando el uso de paquetes deprecados.
+- Implementamos el efecto escalonado (*stagger*) usando **CSS Variables**.
+- Inyectamos notificaciones en los flujos de borrado, favoritos y formularios.
+- Diseñamos una interfaz de "Estado Vacío" robusta para mejorar la UX.

@@ -2,6 +2,7 @@ import { Component, inject, ChangeDetectionStrategy, output, signal, computed } 
 import { NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
 import { RecipeService } from '../../core/services/recipe.service';
+import { NotificationService } from '../../core/services/notification.service';
 import { Recipe } from '../../core/models/recipe.model';
 
 @Component({
@@ -13,6 +14,7 @@ import { Recipe } from '../../core/models/recipe.model';
 })
 export class RecipeListComponent {
   private recipeService = inject(RecipeService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
   
   // Término de búsqueda (Signal reactivo)
@@ -52,6 +54,7 @@ export class RecipeListComponent {
   onToggleFavorite(event: Event, recipe: Recipe) {
     event.stopPropagation(); // Evitamos seleccionar la receta al pulsar el corazón
     this.toggleFavorite.emit(recipe);
+    this.notificationService.show(`"${recipe.title}" añadida a favoritos`, 'info');
   }
 
   deleteRecipe(event: Event, recipe: Recipe) {
@@ -63,6 +66,7 @@ export class RecipeListComponent {
     if (confirmed) {
       this.recipeService.deleteRecipe(recipe.id);
       this.recipeDeleted.emit(recipe.id);
+      this.notificationService.show('Receta eliminada correctamente', 'success');
     }
   }
 }

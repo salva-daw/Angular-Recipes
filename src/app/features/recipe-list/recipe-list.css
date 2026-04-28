@@ -1,1 +1,17 @@
-/* Estilos específicos de RecipeList (usando Tailwind en el HTML) */
+/* Estilos específicos de RecipeList */
+
+.fade-slide-up {
+    animation: fadeSlideUp 0.4s ease-out both;
+    animation-delay: calc(var(--index) * 100ms);
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
