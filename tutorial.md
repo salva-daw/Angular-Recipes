@@ -655,3 +655,44 @@ Hemos optimizado la experiencia cuando no hay resultados de búsqueda, mostrando
 - Implementamos el efecto escalonado (*stagger*) usando **CSS Variables**.
 - Inyectamos notificaciones en los flujos de borrado, favoritos y formularios.
 - Diseñamos una interfaz de "Estado Vacío" robusta para mejorar la UX.
+
+## Paso 21: Preparación para Integración de IA
+
+En este último paso, hemos preparado nuestra aplicación para el futuro, dotándola de la capacidad de interactuar con Modelos de Lenguaje (LLMs) como Gemini. Aunque no estamos haciendo una llamada real a una API externa (para evitar costes y configuraciones de claves), hemos dejado lista toda la infraestructura necesaria.
+
+### Concepto Clave 1: El Prompt Engineering
+Para que una IA nos ayude en la cocina, no basta con decirle "dime algo sobre esta receta". Debemos enviarle un **Prompt estructurado** que incluya el contexto (título, ingredientes, pasos) y una instrucción clara de qué queremos obtener (consejos, maridajes, etc.).
+
+### Concepto Clave 2: Asincronía y Feedback Visual
+Las llamadas a IAs suelen tardar unos segundos. Es vital para la **UX (Experiencia de Usuario)**:
+- Mostrar un estado de carga (loading) mientras esperamos.
+- Deshabilitar los botones para evitar peticiones duplicadas.
+- Utilizar animaciones suaves para mostrar la respuesta cuando llegue.
+
+### Nuestra Aplicación: El Asistente de Cocina Virtual
+Hemos implementado tres funcionalidades inteligentes:
+1.  **`AiAssistantService`**: Centraliza la lógica de generación de prompts y simula las respuestas de la IA con retardos realistas.
+2.  **Interfaz de Consulta**: En el detalle de la receta, el usuario puede elegir entre tres tipos de ayuda: "Versión Saludable", "Maridaje" o "Truco de Chef".
+3.  **Gestión de Estado**: Usamos **Signals** para controlar tanto si la IA está "pensando" como para almacenar y limpiar las respuestas al cambiar de receta.
+
+### Acción realizada:
+- Creamos el **`AiAssistantService`** con métodos para formatear datos en lenguaje natural.
+- Integramos el servicio en **`RecipeDetailComponent`**.
+- Diseñamos una sección visualmente diferenciada con degradados índigo y animaciones de entrada para las respuestas.
+- Implementamos un **esqueleto de carga (pulse effect)** para simular la espera de red.
+
+---
+
+## 🏁 ¡Tutorial Completado! ¡Enhorabuena, Chef de Angular!
+
+Has recorrido un camino increíble, desde crear una simple carpeta hasta construir una aplicación de recetas profesional, reactiva y preparada para la Inteligencia Artificial.
+
+### ¿Qué has aprendido?
+1.  **Angular Moderno**: Signals, Componentes Standalone y Flujo de Control.
+2.  **Arquitectura**: Organización profesional por capas y servicios.
+3.  **Navegación**: Routing avanzado con parámetros vinculados a inputs.
+4.  **Formularios**: Gestión de datos complejos y dinámicos con `FormArray`.
+5.  **Estado y Persistencia**: Sincronización automática con `localStorage` mediante efectos.
+6.  **IA Ready**: Preparación de datos y flujos para servicios inteligentes.
+
+¡Tu **Smart Recipe Box** está lista para conquistar las cocinas digitales! 🚀🥘

@@ -24,6 +24,7 @@ export class RecipeFormComponent {
   recipeForm = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
     description: ['', [Validators.required, Validators.minLength(10)]],
+    image: [''], // Nuevo campo para la imagen
     category: ['lunch', [Validators.required]],
     rating: [5, [Validators.required, Validators.min(1), Validators.max(5)]],
     ingredients: this.fb.array([this.fb.control('', Validators.required)]),
@@ -58,6 +59,7 @@ export class RecipeFormComponent {
           this.recipeForm.patchValue({
             title: recipe.title,
             description: recipe.description,
+            image: recipe.image || '', // Cargamos la imagen si existe
             category: recipe.category,
             rating: recipe.rating
           });
@@ -86,7 +88,7 @@ export class RecipeFormComponent {
     if (this.recipeForm.valid) {
       const formValue = this.recipeForm.value;
       const recipeId = this.id();
-
+      
       const recipeData: Recipe = {
         id: this.isEditMode && recipeId ? recipeId : crypto.randomUUID(),
         title: formValue.title ?? '',
@@ -94,7 +96,8 @@ export class RecipeFormComponent {
         category: (formValue.category as Recipe['category']) ?? 'lunch',
         rating: formValue.rating ?? 5,
         ingredients: (formValue.ingredients as string[]) ?? [],
-        instructions: (formValue.instructions as string[]) ?? []
+        instructions: (formValue.instructions as string[]) ?? [],
+        image: formValue.image || undefined // Usamos el valor del formulario
       };
 
       if (this.isEditMode && recipeId) {
