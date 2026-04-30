@@ -1,28 +1,33 @@
 import { Routes } from '@angular/router';
-import { RecipeListComponent } from './features/recipe-list/recipe-list';
-import { RecipeDetailComponent } from './features/recipe-detail/recipe-detail';
-import { RecipeFormComponent } from './features/recipe-form/recipe-form';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
+    path: 'login',
+    loadComponent: () => import('./features/login/login').then(m => m.LoginComponent)
+  },
+  {
     path: '',
-    component: RecipeListComponent,
-    title: 'Recetario - Listado'
-  },
-  {
-    path: 'add',
-    component: RecipeFormComponent,
-    title: 'Añadir Receta'
-  },
-  {
-    path: 'edit/:id',
-    component: RecipeFormComponent,
-    title: 'Editar Receta'
-  },
-  {
-    path: 'recipe/:id',
-    component: RecipeDetailComponent,
-    title: 'Detalle de Receta'
+    canActivate: [authGuard],
+    loadComponent: () => import('./shared/components/dashboard-layout/dashboard-layout').then(m => m.DashboardLayoutComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./features/recipe-list/recipe-list').then(m => m.RecipeListComponent)
+      },
+      {
+        path: 'recipe/:id',
+        loadComponent: () => import('./features/recipe-detail/recipe-detail').then(m => m.RecipeDetailComponent)
+      },
+      {
+        path: 'add',
+        loadComponent: () => import('./features/recipe-form/recipe-form').then(m => m.RecipeFormComponent)
+      },
+      {
+        path: 'edit/:id',
+        loadComponent: () => import('./features/recipe-form/recipe-form').then(m => m.RecipeFormComponent)
+      }
+    ]
   },
   {
     path: '**',

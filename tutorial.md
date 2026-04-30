@@ -28,7 +28,7 @@ Este tutorial está diseñado para guiarte en la creación de una aplicación mo
 
 ---
 
-# Índice del Tutorial (21 Pasos)
+# Índice del Tutorial (22 Pasos)
 
 ### Fase 1: Cimientos y Estructura
 1.  **Paso 1**: Configuración del Proyecto y Componente Raíz.
@@ -60,6 +60,9 @@ Este tutorial está diseñado para guiarte en la creación de una aplicación mo
 19. **Paso 19**: Efectos (`effect`) y Local Storage.
 20. **Paso 20**: Mejoras de UI/UX (Feedback visual).
 21. **Paso 21**: Preparación para Integración de IA.
+
+### Fase 6: Seguridad y Acceso
+22. **Paso 22**: Login básico y Protección de Rutas.
 
 ---
 
@@ -658,7 +661,7 @@ Hemos optimizado la experiencia cuando no hay resultados de búsqueda, mostrando
 
 ## Paso 21: Preparación para Integración de IA
 
-En este último paso, hemos preparado nuestra aplicación para el futuro, dotándola de la capacidad de interactuar con Modelos de Lenguaje (LLMs) como Gemini. Aunque no estamos haciendo una llamada real a una API externa (para evitar costes y configuraciones de claves), hemos dejado lista toda la infraestructura necesaria.
+En este último paso de la fase 5, hemos preparado nuestra aplicación para el futuro, dotándola de la capacidad de interactuar con Modelos de Lenguaje (LLMs) como Gemini. Aunque no estamos haciendo una llamada real a una API externa (para evitar costes y configuraciones de claves), hemos dejado lista toda la infraestructura necesaria.
 
 ### Concepto Clave 1: El Prompt Engineering
 Para que una IA nos ayude en la cocina, no basta con decirle "dime algo sobre esta receta". Debemos enviarle un **Prompt estructurado** que incluya el contexto (título, ingredientes, pasos) y una instrucción clara de qué queremos obtener (consejos, maridajes, etc.).
@@ -683,16 +686,42 @@ Hemos implementado tres funcionalidades inteligentes:
 
 ---
 
+## Fase 6: Seguridad y Acceso
+
+## Paso 22: Login con Credenciales y Protección de Rutas (AuthGuard)
+
+En este paso, añadimos una capa de seguridad a nuestra aplicación. Implementamos un flujo completo de autenticación con validación de credenciales.
+
+### Concepto Clave 1: El Servicio de Autenticación (`AuthService`)
+Centraliza el estado del usuario mediante un **Signal** y gestiona una lista de usuarios válidos.
+- **`VALID_USERS`**: Una lista privada de objetos con `username` y `password`.
+- **`login(user, pass)`**: Busca en la lista de usuarios. Si coinciden, guarda el token y activa el Signal `isLoggedIn`.
+- **`logout()`**: Limpia la sesión y redirige al usuario al login.
+
+### Concepto Clave 2: Formularios Reactivos para Login
+Usamos `ReactiveFormsModule` para capturar y validar las credenciales.
+- **Validación en tiempo real**: Los campos muestran errores si están vacíos al intentar enviar.
+- **Feedback de Error**: Si las credenciales son incorrectas, mostramos una alerta visual al usuario.
+
+### Concepto Clave 3: Layouts y Rutas Hijas
+Organizamos la aplicación en dos grandes bloques:
+1.  **Bloque Público**: La página de Login (limpia, sin menús).
+2.  **Bloque Privado (Dashboard)**: El recetario completo envuelto en un `DashboardLayout` que incluye la cabecera y el contenedor principal.
+
+### Concepto Clave 4: Carga Perezosa (Lazy Loading)
+Para que nuestra aplicación sea ultra rápida, no cargamos todo el código al principio. Usamos **Lazy Loading**.
+- **`loadComponent`**: En lugar de importar los componentes arriba en el archivo de rutas, usamos una función que "importa" el archivo solo cuando el usuario navega a esa dirección.
+- **Beneficio**: El navegador descarga menos megas al principio, lo que es vital para usuarios con conexiones lentas o móviles.
+
+### Acción realizada:
+- Creamos el **`AuthService`** con lógica de validación de credenciales.
+- Implementamos el componente **`LoginComponent`** con un formulario reactivo y manejo de estados de error.
+- Desarrollamos el **`AuthGuard`** para proteger las rutas privadas.
+- Creamos el **`DashboardLayoutComponent`** para unificar la interfaz del recetario.
+- Reestructuramos el **`app.routes.ts`** usando rutas hijas, protección con Guards y **Lazy Loading** para todos los componentes principales.
+
+---
+
 ## 🏁 ¡Tutorial Completado! ¡Enhorabuena, Chef de Angular!
 
-Has recorrido un camino increíble, desde crear una simple carpeta hasta construir una aplicación de recetas profesional, reactiva y preparada para la Inteligencia Artificial.
-
-### ¿Qué has aprendido?
-1.  **Angular Moderno**: Signals, Componentes Standalone y Flujo de Control.
-2.  **Arquitectura**: Organización profesional por capas y servicios.
-3.  **Navegación**: Routing avanzado con parámetros vinculados a inputs.
-4.  **Formularios**: Gestión de datos complejos y dinámicos con `FormArray`.
-5.  **Estado y Persistencia**: Sincronización automática con `localStorage` mediante efectos.
-6.  **IA Ready**: Preparación de datos y flujos para servicios inteligentes.
-
-¡Tu **Smart Recipe Box** está lista para conquistar las cocinas digitales! 🚀🥘
+¡Tu **Smart Recipe Box** está ahora protegida y lista para conquistar las cocinas digitales! 🚀🥘

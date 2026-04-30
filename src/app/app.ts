@@ -1,13 +1,14 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { ToastContainerComponent } from './shared/components/toast-container/toast-container';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, ToastContainerComponent],
+  imports: [RouterOutlet, ToastContainerComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App {
-  protected readonly title = signal('Smart Recipe Box');
+  // El componente raíz ahora es un simple host para las rutas y notificaciones
 }
